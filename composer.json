@@ -1,0 +1,15 @@
+{
+  "name": "wyrihaximus/github-action-wait-for-status",
+  "description": "Github Action that waits for successful commit statuses and checks.",
+  "require": {
+    "php": "^7.4",
+    "jwage/changelog-generator": "^1.2"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4"
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
+}
