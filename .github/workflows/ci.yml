@@ -8,6 +8,23 @@ on:
       - master
   pull_request:
 jobs:
+  generate-ref:
+    name: Generate Ref
+    runs-on: ubuntu-latest
+    outputs:
+      REF: ${{ steps.generate-ref.outputs.ref }}
+    steps:
+      - uses: actions/checkout@v1
+      - id: generate-ref
+        name: Generate Ref
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ] ; then
+            echo "${{ github.event.pull_request.head.ref }}"
+            echo "::set-output name=ref::${{ github.event.pull_request.head.ref }}"
+            exit 0
+          fi
+          echo "${GITHUB_REF##*/}"
+          echo "::set-output name=ref::${GITHUB_REF##*/}"
   lint-dockerfile:
     name: Lint Dockerfile
     runs-on: ubuntu-latest
@@ -21,6 +38,7 @@ jobs:
   build-docker-image:
     name: Build Docker image
     needs:
+      - generate-ref
       - lint-dockerfile
     runs-on: ubuntu-latest
     steps:
@@ -33,16 +51,18 @@ jobs:
           sudo chmod +x /usr/local/bin/clair-scanner
       - run: docker images
       - run: mkdir -p $(echo "./clair/${DOCKER_IMAGE}:${REF}" | tr '[:upper:]' '[:lower:]')
+        env:
+          REF: ${{ needs.generate-ref.outputs.ref }}
       - run: docker-compose -f .docker/security/docker-compose.yml -p clair-ci up -d
       - run: docker build --no-cache -t "${DOCKER_IMAGE}:${REF}" . -f Dockerfile-build --target=runtime
         env:
-          REF: ${{ github.event.pull_request.head.ref }}
+          REF: ${{ needs.generate-ref.outputs.ref }}
       - run: docker tag "${DOCKER_IMAGE}:${REF}" "${DOCKER_IMAGE}:sha-${GITHUB_SHA}"
         env:
-          REF: ${{ github.event.pull_request.head.ref }}
+          REF: ${{ needs.generate-ref.outputs.ref }}
       - run: echo -e "${DOCKER_IMAGE}:${REF}" | xargs -I % sh -c 'clair-scanner --ip 172.17.0.1 -r "./clair/%.json" -l ./clair/clair.log % || (echo "% is vulnerable" && exit 1)'
         env:
-          REF: ${{ github.event.pull_request.head.ref }}
+          REF: ${{ needs.generate-ref.outputs.ref }}
       - run: docker-compose -f .docker/security/docker-compose.yml -p clair-ci down
       - run: docker images
       - name: Login to Docker Hub
@@ -59,7 +79,7 @@ jobs:
         if: contains(github.ref, 'dependabot') == false
         run: docker push "${DOCKER_IMAGE}:${REF}"
         env:
-          REF: ${{ github.event.pull_request.head.ref }}
+          REF: ${{ needs.generate-ref.outputs.ref }}
       - name: Push commit sha image to Docker Hub
         if: contains(github.ref, 'dependabot') == false
         run: docker push "${DOCKER_IMAGE}:sha-${GITHUB_SHA}"
