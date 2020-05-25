@@ -1,0 +1,12 @@
+name: 'Changelog generator'
+description: 'Changelog generator using jwave/changelog-generator'
+branding:
+  icon: 'list'
+  color: 'green'
+inputs:
+  milestone:
+    description: 'The milestone title, e.g. v1.0.0'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
