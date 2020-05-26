@@ -35,9 +35,28 @@ jobs:
         with:
           entrypoint: hadolint
           args: Dockerfile-build
+  generate-changelog:
+    name: Generate Changelog
+    needs:
+      - lint-dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Generate changelog
+        uses: ./
+        id: changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          milestone: "v0.1.0"
+      - name: Show changelog
+        run: echo "${CHANGELOG}"
+        env:
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
   build-docker-image:
     name: Build Docker image
     needs:
+      - generate-changelog
       - generate-ref
       - lint-dockerfile
     runs-on: ubuntu-latest
