@@ -12,6 +12,11 @@ if [ $(echo ${INPUT_MILESTONE} | wc -c) -eq 1 ] ; then
   exit 1
 fi
 
+echo "Creating changelog for:"
+echo "User: $(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1)"
+echo "Repository: ${GITHUB_REPOSITORY##*/}"
+echo "Milestone: ${INPUT_MILESTONE}"
+
 echo "<?php declare(strict_types=1); return ['changelog-generator' => (new ChangelogGenerator\ChangelogConfig())->setGitHubCredentials(new ChangelogGenerator\GitHubUsernamePassword('$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1)', '${GITHUB_TOKEN}')),];" > /workdir/config.php
 
 changelog=$(/workdir/vendor/bin/changelog-generator generate --config=/workdir/config.php --user=$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1) --repository=${GITHUB_REPOSITORY##*/} --milestone=${INPUT_MILESTONE})
