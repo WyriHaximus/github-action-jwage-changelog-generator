@@ -58,7 +58,6 @@ jobs:
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
-      - uses: actions/checkout@v1
       - name: Generate changelog
         uses: WyriHaximus/github-action-jwage-changelog-generator@master
         id: changelog
