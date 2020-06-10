@@ -1,1 +1,0 @@
-FROM wyrihaximusgithubactions/jwage-changelog-generator:${}
