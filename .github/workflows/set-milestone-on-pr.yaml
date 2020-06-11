@@ -22,10 +22,12 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       - run: |
           if [ $(echo ${GITTAG} | wc -c) -eq 1 ] ; then
+            printf "Falling back to v1.0.0 as \"%s\" is unexpectedly empty\r\n" "${GITTAG}"
             printf "::set-output name=tag::%s" "v1.0.0"
             exit 0
           fi
 
+          printf "Using \"%s\"\r\n" "${GITTAG}"
           printf "::set-output name=tag::%s" "${GITTAG}"
         name: Fall back to v1.0.0 if we haven't tagged anything yet
         id: previoustag
@@ -37,7 +39,7 @@ jobs:
         with:
           version: ${{ steps.previoustag.outputs.tag }}
       - run: |
-          printf "::set-output name=milestone::%s" "${PREVIOUSTAG}"
+          printf "::set-output name=milestone::%s" "${MINOR}"
         name: Decide which version to use as milestone
         id: milestone
         env:
