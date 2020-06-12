@@ -44,6 +44,16 @@ jobs:
           version: ${{ steps.previoustag.outputs.tag }}
           strict: false
       - run: |
+          if [ "$IS_DEPENDABOT" = true ] ; then
+            echo "Is dependabot PR"
+            if [[ "$(printenv MILESTONES | jq -c '. | length')" -eq "0" ]] ; then
+              echo "No milestone exists, usint patch version for next milestone"
+              printf "::set-output name=milestone::%s" "${PATCH}"
+              exit 0
+            fi
+          fi
+
+          echo "Using default minor version for next milestone"
           printf "::set-output name=milestone::%s" "${MINOR}"
         name: Decide which version to use as milestone
         if: github.event.pull_request.milestone == null
@@ -53,7 +63,7 @@ jobs:
           MAJOR: ${{ steps.semvers.outputs.v_major }}
           MINOR: ${{ steps.semvers.outputs.v_minor }}
           PATCH: ${{ steps.semvers.outputs.v_patch }}
-          IS_DEPENDABOT: contains(github.ref, 'dependabot')
+          IS_DEPENDABOT: ${{ contains(github.ref, 'dependabot') }}
           GITTAG: ${{ steps.previousgittag.outputs.tag }}
           PREVIOUSTAG: ${{ steps.previoustag.outputs.tag }}
       - name: 'Get Milestones'
