@@ -21,7 +21,8 @@ echo "<?php declare(strict_types=1); return ['changelog-generator' => (new Chang
 
 changelog=$(/workdir/vendor/bin/changelog-generator generate --config=/workdir/config.php --user="$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1)" --repository="${GITHUB_REPOSITORY##*/}" --milestone="${INPUT_MILESTONE}" -vvv)
 
-echo "Changelog generated:\r\n${changelog}"
+echo "Changelog generated:"
+echo "${changelog}"
 
 changelog="${changelog//'%'/'%25'}"
 changelog="${changelog//$'\n'/'%0A'}"
