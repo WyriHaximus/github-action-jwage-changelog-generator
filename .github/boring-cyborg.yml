@@ -1,0 +1,7 @@
+labelPRBasedOnFilePath:
+  "Dependencies 📦":
+    - Dockerfile
+    - Dockerfile-build
+  "Docker 🐳":
+    - Dockerfile
+    - Dockerfile-build
