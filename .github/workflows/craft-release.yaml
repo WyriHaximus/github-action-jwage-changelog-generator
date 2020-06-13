@@ -49,7 +49,7 @@ jobs:
           echo "::set-output name=docker_versions::[\"${MAJOR}\",\"${MAJOR_MINOR}\",\"${MAJOR_MINOR_PATCH}\"]"
           git tag > tag.list
           cat tag.list
-          printf "::set-output name=tag_versions::%s" $(jq --raw-input --slurp 'split("\n")' test.tag.list -c | php -r "echo json_encode(array_values(array_diff_assoc(json_decode('[\"${MAJOR}\",\"${MAJOR_MINOR}\",\"${MAJOR_MINOR_PATCH}\"]'), json_decode(stream_get_contents(STDIN)))));")
+          printf "::set-output name=tag_versions::%s" $(jq --raw-input --slurp 'split("\n")' tag.list -c | php -r "echo json_encode(array_values(array_diff_assoc(json_decode('[\"${MAJOR}\",\"${MAJOR_MINOR}\",\"${MAJOR_MINOR_PATCH}\"]'), json_decode(stream_get_contents(STDIN)))));")
   generate-changelog:
     name: Generate Changelog
     needs:
