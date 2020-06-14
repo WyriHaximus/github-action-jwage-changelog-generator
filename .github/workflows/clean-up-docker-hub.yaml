@@ -18,7 +18,7 @@ jobs:
 #            --username "${{ secrets.DOCKER_USER }}" \
 #            --password-stdin
       - run: |
-          curl -i -u "${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASSWORD }}" -X "DELETE" https://cloud.docker.com/v2/repositories/$DOCKER_IMAGE/tags/$TAG/
+          curl -i -u "${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASSWORD }}" -X "DELETE" https://hub.docker.com/v2/repositories/$DOCKER_IMAGE/tags/$TAG/
         name: Delete tag
         id: previoustag
         env:
