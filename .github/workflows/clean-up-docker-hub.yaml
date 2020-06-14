@@ -18,7 +18,7 @@ jobs:
 #            --username "${{ secrets.DOCKER_USER }}" \
 #            --password-stdin
       - run: |
-          curl --verbose --no-progress-meter -u "${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASSWORD }}" -X "DELETE" https://cloud.docker.com/v2/repositories/$DOCKER_IMAGE/tags/$TAG/
+          curl --verbose -u "${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASSWORD }}" -X "DELETE" https://cloud.docker.com/v2/repositories/$DOCKER_IMAGE/tags/$TAG/
         name: Delete tag
         id: previoustag
         env:
