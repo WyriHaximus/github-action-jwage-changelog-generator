@@ -19,8 +19,9 @@ jobs:
         name: Generate Ref
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ] ; then
-            echo "${{ github.event.pull_request.head.ref }}"
-            echo "::set-output name=ref::${{ github.event.pull_request.head.ref }}"
+            ref=$(php -r "echo str_replace('/', '-SLASH-', '${{ github.event.pull_request.head.ref }}');")
+            echo "$ref"
+            printf "::set-output name=ref::%s" $ref
             exit 0
           fi
           echo "${GITHUB_REF##*/}"
