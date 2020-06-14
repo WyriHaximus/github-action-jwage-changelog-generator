@@ -1,0 +1,25 @@
+name: Clean up Docker Hub
+env:
+  DOCKER_IMAGE: wyrihaximusgithubactions/jwage-changelog-generator
+on:
+  push:
+jobs:
+  clean-up-docker-hub:
+    runs-on: ubuntu-latest
+    steps:
+#      - uses: actions/checkout@v1
+#      - name: Login to Docker Hub
+#        env:
+#          DOCKER_USER: ${{ secrets.HUB_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.HUB_PASSCODE }}
+#        run: |
+#          echo "${{ secrets.DOCKER_PASSWORD }}" | \
+#          docker login \
+#            --username "${{ secrets.DOCKER_USER }}" \
+#            --password-stdin
+      - run: |
+          curl -u "${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASSWORD }}" -X "DELETE" https://cloud.docker.com/v2/repositories/$DOCKER_IMAGE/tags/$TAG/
+        name: Delete tag
+        id: previoustag
+        env:
+          TAG: sha-97ec2d6bf319a11c5d8e0fa939bfd634bf407c93
