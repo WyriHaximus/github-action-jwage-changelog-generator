@@ -1,5 +1,5 @@
-name: 'Changelog generator'
-description: 'Changelog generator using jwave/changelog-generator'
+name: 'JWage Changelog generator'
+description: 'Changelog generator using jwage/changelog-generator'
 branding:
   icon: 'list'
   color: 'green'
