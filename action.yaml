@@ -1,4 +1,4 @@
-name: 'JWage Changelog generator'
+name: 'Changelog generator using jwage/changelog-generator'
 description: 'Changelog generator using jwage/changelog-generator'
 branding:
   icon: 'list'
