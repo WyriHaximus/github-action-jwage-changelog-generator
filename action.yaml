@@ -1,4 +1,4 @@
-name: 'Changelog generator using jwage/changelog-generator'
+name: 'PHP Changelog Cenerator'
 description: 'Changelog generator using jwage/changelog-generator'
 branding:
   icon: 'list'
