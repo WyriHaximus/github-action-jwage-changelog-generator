@@ -1,1 +1,1 @@
-FROM wyrihaximusgithubactions/jwage-changelog-generator:master
+FROM wyrihaximusgithubactions/jwage-changelog-generator:v1.2
