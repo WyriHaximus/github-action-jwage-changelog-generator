@@ -17,7 +17,13 @@ echo "User: $(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1)"
 echo "Repository: ${GITHUB_REPOSITORY##*/}"
 echo "Milestone: ${INPUT_MILESTONE}"
 
-echo "<?php declare(strict_types=1); return ['changelog-generator' => (new ChangelogGenerator\ChangelogConfig())->setGitHubCredentials(new ChangelogGenerator\GitHubOAuthToken('${GITHUB_TOKEN}')),];" > /workdir/config.php
+if [ $(echo ${INPUT_LABELS} | wc -c) -eq 1 ] ; then
+  echo "<?php declare(strict_types=1); return ['changelog-generator' => (new ChangelogGenerator\ChangelogConfig())->setGitHubCredentials(new ChangelogGenerator\GitHubOAuthToken('${GITHUB_TOKEN}')),];" > /workdir/config.php
+else
+  echo "<?php declare(strict_types=1); return ['changelog-generator' => (new ChangelogGenerator\ChangelogConfig())->setGitHubCredentials(new ChangelogGenerator\GitHubOAuthToken('${GITHUB_TOKEN}'))->setLabels(explode(',', '${INPUT_LABELS}')),];" > /workdir/config.php
+fi
+
+cat /workdir/config.php
 
 changelog=$(/workdir/vendor/bin/changelog-generator generate --config=/workdir/config.php --user="$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f1)" --repository="${GITHUB_REPOSITORY##*/}" --milestone="${INPUT_MILESTONE}" -vvv)
 
