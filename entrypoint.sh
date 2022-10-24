@@ -34,4 +34,4 @@ changelog="${changelog//'%'/'%25'}"
 changelog="${changelog//$'\n'/'%0A'}"
 changelog="${changelog//$'\r'/'%0D'}"
 
-echo "::set-output name=changelog::$changelog"
+echo "changelog=$changelog" >> $GITHUB_OUTPUT
