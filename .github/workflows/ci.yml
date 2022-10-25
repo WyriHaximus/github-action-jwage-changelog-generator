@@ -25,7 +25,7 @@ jobs:
             exit 0
           fi
           echo "${GITHUB_REF##*/}"
-          echo "::set-output name=ref::${GITHUB_REF##*/}"
+          echo "ref=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
   lint-dockerfile:
     name: Lint Dockerfile
     runs-on: ubuntu-latest
