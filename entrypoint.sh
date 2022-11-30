@@ -30,8 +30,7 @@ changelog=$(/workdir/vendor/bin/changelog-generator generate --config=/workdir/c
 echo "Changelog generated:"
 echo "${changelog}"
 
-changelog="${changelog//'%'/'%25'}"
-changelog="${changelog//$'\n'/'%0A'}"
-changelog="${changelog//$'\r'/'%0D'}"
-
-echo "changelog=$changelog" >> $GITHUB_OUTPUT
+delimiter="$(openssl rand -hex 8)"
+echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
+echo "$changelog" >> "${GITHUB_OUTPUT}"
+echo "${delimiter}" >> "${GITHUB_OUTPUT}"
